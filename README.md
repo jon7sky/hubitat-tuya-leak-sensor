@@ -15,8 +15,13 @@ The check was a chain: each run used `runIn()` to book the next one an hour late
 3. **"Mark offline after" preference**: 4, 8, 13 or 24 hours. The default is 13, the upstream timeout.
 4. **`initialize()` no longer wipes the device.** Upstream's `initialize()` ran `configure()`, a full reset. It now only restores the schedules. **Configure** is still the full reset, but it keeps the last-heard time so it doesn't restart the offline clock.
 5. **State `lastSeen`** shows when the sensor was last heard. `notPresentCounter` now counts hours of silence.
+6. **Exact-match fingerprint for TS0207 `_TZ3000_k4ej3ww2`** (1.2.1). These units report `outClusters: 000A` at join, without the `0019` the upstream fingerprint expects. Hubitat therefore never matched the upstream fingerprint exactly and paired them with whichever driver matched the clusters best, for example *Tuya Multi Sensor 4 In 1*. A second fingerprint with the clusters these units actually report fixes that.
 
-Parsing, fingerprints, and water and battery handling are unchanged.
+Parsing, and water and battery handling, are unchanged.
+
+## If a sensor pairs with the wrong driver
+
+Hubitat picks a driver by comparing what the sensor reports at join against each driver's fingerprints. To see what a sensor reported, open **Logs → Past logs** and search for `inClusters`. Look for the *Zigbee device endpoints* line from the time it joined. If its model, manufacturer, or cluster lists aren't in this driver's fingerprints, open an issue with that line.
 
 ## Install
 

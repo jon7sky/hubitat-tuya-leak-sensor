@@ -1,12 +1,12 @@
 {
     "packageName": "Tuya Zigbee Water Leak Sensor",
     "author": "John Sevinsky",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "minimumHEVersion": "2.3.0",
     "dateReleased": "2026-10-11",
     "documentationLink": "https://github.com/jon7sky/hubitat-tuya-leak-sensor/blob/main/README.md",
     "licenseFile": "https://raw.githubusercontent.com/jon7sky/hubitat-tuya-leak-sensor/main/LICENSE",
-    "releaseNotes": "1.2.0: Fork of kkossev's Tuya NEO Coolcam Zigbee Water Leak Sensor 1.1.4. The offline health check is now a persistent hourly cron schedule, restored at hub start-up, Save Preferences and Configure, instead of a self-rescheduling runIn chain that could silently stop. Offline is decided from the time the sensor was last heard (falling back to Last Activity), with a 'Mark offline after' preference.",
+    "releaseNotes": "1.2.1: Exact-match fingerprint for TS0207 _TZ3000_k4ej3ww2 as these units report at join (outClusters 000A, no 0019), so new sensors pair with this driver instead of a best-cluster-match driver. 1.2.0: Fork of kkossev's Tuya NEO Coolcam Zigbee Water Leak Sensor 1.1.4. The offline health check is now a persistent hourly cron schedule, restored at hub start-up, Save Preferences and Configure, instead of a self-rescheduling runIn chain that could silently stop. Offline is decided from the time the sensor was last heard (falling back to Last Activity), with a 'Mark offline after' preference.",
     "drivers": [
         {
             "id": "00789fe8-68c0-4931-b035-5acebe3d554c",
@@ -14,7 +14,7 @@
             "namespace": "jon7sky",
             "location": "https://raw.githubusercontent.com/jon7sky/hubitat-tuya-leak-sensor/main/drivers/tuya-water-leak-sensor.groovy",
             "required": true,
-            "version": "1.2.0"
+            "version": "1.2.1"
         }
     ]
 }

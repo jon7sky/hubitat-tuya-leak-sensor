@@ -27,8 +27,12 @@
  *     still the full reset it was.
  *  5. State lastSeen shows when the sensor was last heard; notPresentCounter now counts hours of
  *     silence.
+ *  6. Fingerprint for TS0207 _TZ3000_k4ej3ww2 as these units actually report at join
+ *     (inClusters 0000,0003,0500,0001; outClusters 000A -- no 0019). The original fingerprint
+ *     lists outClusters 0019,000A, so it never matched exactly and Hubitat paired the sensor with
+ *     whichever driver matched the clusters best (seen: Tuya Multi Sensor 4 In 1).
  *
- *  Everything else -- parsing, fingerprints, water and battery handling -- is unchanged.
+ *  Everything else -- parsing, water and battery handling -- is unchanged.
  *
  *	Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *	in compliance with the License. You may obtain a copy of the License at:
@@ -56,6 +60,7 @@
  * ver. 1.1.3 2024-08-02 kkossev  - added Sonoff SNZB-05P
  * ver. 1.1.4 2025-03-01 kkossev  - added TS0207 _TZ3000_k4ej3ww2 _TZ3000_d16y6col _TZ3000_ww9i3e0y _TZ3000_qhozxs2b _TZ3000_85czd6fy _TZ3000_ocjlo4ea _TZ3000_fxvjhdyl _TZ3000_eit7p838 _TZ3000_it1hm1cr _TZ3000_awvmkayh _TZ3000_kstbkt6a _TZ3000_arw23zcs _TZ3000_wuep9zng
  * ver. 1.2.0 2026-10-11 jon7sky  - fork: persistent cron health check, time-based offline detection, 'Mark offline after' preference (see above)
+ * ver. 1.2.1 2026-10-11 jon7sky  - exact-match fingerprint for TS0207 _TZ3000_k4ej3ww2 (outClusters 000A), so new units pair with this driver
  *
  *                                  TODO:  scheduleCommandTimeoutCheck()
  *                                  TODO: check why Neo Coolcam is not sending actual battery reports : https://community.hubitat.com/t/release-tuya-neo-coolcam-zigbee-water-leak-sensor/91370/86?u=kkossev 
@@ -63,8 +68,8 @@
  *
 */
 
-def version() { "1.2.0" }
-def timeStamp() {"2026/10/11 10:30 AM"}
+def version() { "1.2.1" }
+def timeStamp() {"2026/10/11 12:20 PM"}
 
 @Field static final Boolean debug = false
 @Field static final Boolean debugLogsDefault = true
@@ -117,6 +122,7 @@ metadata {
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,FF01,FF00,0001,0500", outClusters:"0019,0006", model:"3RWS18BZ", manufacturer:"Third Reality, Inc", deviceJoinName: "ThirdReality Water Leak Sensor"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0001,0003,0020,0500,FC57", outClusters:"0003,0019", model:"SNZB-05P", manufacturer:"SONOFF", controllerType: "ZGB", deviceJoinName: "Sonoff SNZB-05 Water Leak Sensor"
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0001,0003,0500,0000",      outClusters:"0019,000A", model:"TS0207", manufacturer:"_TZ3000_k4ej3ww2", deviceJoinName: "Tuya Leak Sensor TS0207"          // https://community.hubitat.com/t/release-tuya-neo-coolcam-zigbee-water-leak-sensor/91370/159?u=kkossev
+        fingerprint profileId:"0104", endpointId:"01", inClusters:"0000,0003,0500,0001",      outClusters:"000A",      model:"TS0207", manufacturer:"_TZ3000_k4ej3ww2", deviceJoinName: "Tuya Leak Sensor TS0207"          // jon7sky: as reported at join by a unit paired 2026-10-11 (no 0019 out-cluster)
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0001,0003,0500,0000",      outClusters:"0019,000A", model:"TS0207", manufacturer:"_TZ3000_d16y6col", deviceJoinName: "Tuya Leak Sensor TS0207"          // not tested
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0001,0003,0500,0000",      outClusters:"0019,000A", model:"TS0207", manufacturer:"_TZ3000_ww9i3e0y", deviceJoinName: "Tuya Leak Sensor TS0207"          // not tested
         fingerprint profileId:"0104", endpointId:"01", inClusters:"0001,0003,0500,0000",      outClusters:"0019,000A", model:"TS0207", manufacturer:"_TZ3000_qhozxs2b", deviceJoinName: "Tuya Leak Sensor TS0207"          // not tested
